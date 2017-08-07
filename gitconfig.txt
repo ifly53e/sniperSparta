@@ -1,0 +1,25 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[user]
+		name =ifly53e
+		email =ifly53e@gmail.com
+[remote "origin"]
+	url = https://github.com/ifly53e/sniperSparta.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+
+
+	delete .git folder with rm -r .git
+	delete any git repo on the server
+	create new repo on server
+	then run the bash below:
+
+	// after git init might want to edit the .git/config to look like the code above first?
+
+	git init
+	git remote add origin https://github.com/ifly53e/sniper1.git
+	git add .
+	git commit -m "Initial commit"
+	git push -u origin master

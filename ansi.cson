@@ -1,0 +1,977 @@
+'fileTypes': [
+  'ansi'
+]
+'name': 'ANSI Terminal Markup'
+'scopeName': 'text.ansi'
+'patterns': [
+  {
+    'include': '#terminalMarkup'
+  }
+]
+'repository':
+  'terminalMarkup':
+    'patterns': [
+      {
+        'begin': '(\\x1B\\[)(?=\\d{1,2}(;\\d{1,2})*m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.csi.ansi'
+        'name': 'meta.markup.terminal.ansi'
+        'applyEndPatternLast': true
+        'end': '(?=\\x1B\\[\\d{1,2}(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+    ]
+  'ansiFormatted':
+    'patterns': [
+      {
+        'begin': '(\\x1B\\[)(?=\\d{1,2}(;\\d{1,2})*m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.csi.ansi'
+        'applyEndPatternLast': true
+        'end': '(?=\\x1B\\[\\d{1,2}(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+    ]
+  'ansiFormat':
+    'patterns': [
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(0)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.reset.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.reset.ansi'
+        'end': '(?=\\x1B\\[((?!\\d+;)\\d{1,2};)*\\d+(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(0)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.reset.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.reset.ansi'
+        'end': '(?=\\x1B\\[((?!\\d+;)\\d{1,2};)*\\d+(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(30)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.black.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.black.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(30)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.black.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.black.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(31)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.red.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.red.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(31)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.red.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.red.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(32)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.green.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.green.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(32)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.green.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.green.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(33)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.yellow.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.yellow.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(33)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.yellow.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.yellow.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(34)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.blue.ansi'
+          '2':
+            'name': 'hredidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.blue.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(34)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.blue.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.blue.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(35)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.magenta.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.magenta.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(35)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.magenta.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.magenta.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(36)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.cyan.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.cyan.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(36)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.cyan.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.cyan.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(37)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.white.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.white.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(37)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.white.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.white.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(39)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.normal.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.normal.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(39)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.normal.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.normal.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|31|32|33|34|35|36|37|38|39);)\\d{1,2};)*(?:0|31|32|33|34|35|36|37|38|39)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(1)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bold.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.bold.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|2|21|22);)\\d{1,2};)*(?:0|2|21|22)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(1)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bold.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.bold.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|2|21|22);)\\d{1,2};)*(?:0|2|21|22)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(3)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.italic.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.italic.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|23);)\\d{1,2};)*(?:0|23)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(3)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.italic.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.italic.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|23);)\\d{1,2};)*(?:0|23)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(4)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.underline.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.underline.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|24);)\\d{1,2};)*(?:0|24)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(4)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.underline.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.underline.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|24);)\\d{1,2};)*(?:0|24)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(7)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.reversed.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.reversed.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|27);)\\d{1,2};)*(?:0|27)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(7)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.reversed.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.reversed.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|27);)\\d{1,2};)*(?:0|27)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(40)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-black.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-black.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(40)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-black.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-black.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(41)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-red.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-red.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(41)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-red.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-red.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(42)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-green.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-green.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(42)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-green.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-green.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(43)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-yellow.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-yellow.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(43)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-yellow.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-yellow.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(44)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-blue.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-blue.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(44)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-blue.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-blue.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(45)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-purple.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-purple.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(45)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-purple.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-purple.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(46)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-cyan.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-cyan.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(46)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-cyan.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-cyan.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(47)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-white.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-white.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(47)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-white.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-white.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(49)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-normal.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.bg-normal.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(49)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.bg-normal.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.bg-normal.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|41|42|43|44|45|46|47|48|49);)\\d{1,2};)*(?:0|41|42|43|44|45|46|47|48|49)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(91)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.red.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.red.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(91)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.red.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.red.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(92)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.green.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.green.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(92)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.green.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.green.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(93)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.yellow.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.yellow.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(93)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.yellow.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.yellow.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(94)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.blue.ansi'
+          '2':
+            'name': 'hredidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.blue.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(94)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.blue.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.blue.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(95)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.magenta.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.magenta.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(95)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.magenta.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.magenta.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(96)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.cyan.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.cyan.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(96)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.cyan.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.cyan.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(97)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.white.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.white.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(97)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.white.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.white.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(99)(;)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.normal.ansi'
+          '2':
+            'name': 'hidden.escape-code.separator.ansi'
+        'contentName': 'markup.color.normal.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormat'
+          }
+        ]
+      }
+      {
+        'begin': '(?<=\\x1B\\[|\\d;)(99)(m)'
+        'beginCaptures':
+          '1':
+            'name': 'hidden.escape-code.pmc.normal.ansi'
+          '2':
+            'name': 'hidden.escape-code.letter.m.ansi'
+        'contentName': 'markup.color.normal.ansi'
+        'end': '(?=\\x1B\\[((?!(?:0|91|92|93|94|95|96|97|98|99);)\\d{1,2};)*(?:0|91|92|93|94|95|96|97|98|99)(;\\d{1,2})*m)'
+        'patterns': [
+          {
+            'include': '#ansiFormatted'
+          }
+        ]
+      }
+    ]
