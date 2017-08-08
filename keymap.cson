@@ -1,0 +1,7 @@
+'atom-text-editor':
+  'ctrl-shift-a': 'set-syntax:ANSI Terminal Markup'
+'body':
+  'ctrl-shift-a': 'set-syntax:ANSI Terminal Markup'
+
+'atom-workspace, atom-workspace atom-text-editor':
+  'ctrl-shift-a': 'set-syntax:ANSI Terminal Markup'

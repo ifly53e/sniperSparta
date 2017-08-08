@@ -30,9 +30,13 @@ mv /usr/share/sparta/scripts/ /usr/share/sparta/scripts_$(date +'%FT%H%M%S%3N')/
 cp -r ./scripts /usr/share/sparta/
 
 #make sure atom language-ansi package is installed first or this won't work
-echo "replacing ansi.cson"
+echo "replacing atom ansi.cson"
 mv /root/.atom/packages/language-ansi/grammars/ansi.cson /root/.atom/packages/language-ansi/grammars/ansi.cson_$(date +'%FT%H%M%S%3N')
 cp ./ansi.cson /root/.atom/packages/language-ansi/grammars/ansi.cson
+
+echo "replacing atom keymap.cson"
+mv /root/.atom/keymap.cson /root/.atom/keymap.cson_$(date +'%FT%H%M%S%3N')
+cp ./keymap.cson /root/.atom/keymap.cson
 
 #for smb-psexec NSE script (will cause antivirus false positive)
 echo "adding nmap_service.exe"
