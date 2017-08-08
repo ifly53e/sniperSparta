@@ -14,6 +14,9 @@
 
 #apt-get update && upgrade -y
 
+#for smb-psexec NSE script (will cause antivirus false positive)
+#cp ./nmap_service.exe /usr/share/nmap/nselib/data/psexec/
+
 #make sure sniper is installed first or this won't work
 echo "replacing sniper"
 mv /usr/share/sniper/sniper /usr/share/sniper/sniper_$(date +'%FT%H%M%S%3N')
