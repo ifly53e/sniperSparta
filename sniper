@@ -272,6 +272,10 @@ function loot {
 	cp -Rf $LOOT_DIR/web/ $LOOT_DIR/workspace/$WORKSPACE/ 2> /dev/null
 	rm -Rf $LOOT_DIR/{screenshots,nmap,domains,output,reports,imports,notes,web}/ 2> /dev/null
 	mkdir $LOOT_DIR/{screenshots,nmap,domains,output,reports,imports,notes,web}/ -p 2> /dev/null
+	echo -e "$OKORANGE + -- --=[looking for the word VULNERABLE in the workspace directory...$RESET"
+	cd $LOOT_DIR/workspace/$WORKSPACE/
+	grep -Ri 'vulnerable\|is affected' | grep -vi "may not be vulnerable" | grep -vi "is not vulnerable" | grep -vi "not vulnerable" | tee $LOOT_DIR/workspace/$WORKSPACE/reports/vulnerable_report_$(date +'%FT%H%M%S%3N').txt
+	echo "check out the reports folder for the results"
 	echo -e "$OKORANGE + -- --=[Opening workspace directory...$RESET"
   #firefox 2> /dev/null &
 	#sleep 2
@@ -323,7 +327,7 @@ function help {
     echo -e " + -- --=[LOOT: Automatically organizes and displays loot folder in your browser and opens Zenmap GUI with all port scan results. To run, type sniper loot.$RESET"
     echo ""
     echo ""
-    check_update
+    #check_update
 }
 
 if [ -z $TARGET ]; then
@@ -338,7 +342,7 @@ if [ -z $TARGET ]; then
 	echo -e "$OKORANGE + -- --=[sniper v$VER by 1N3$RESET"
 	echo -e "$OKORANGE + -- --=[Usage: sniper <target>$RESET"
 	echo ""
-	check_update
+	#check_update
 	exit
 fi
 
@@ -363,7 +367,7 @@ fi
 init
 
 # CHECK FOR UPDATES
-check_update
+#check_update
 
 if [ "$MODE" = "report" ]; then
 	sniper $TARGET | tee $LOOT_DIR/sniper-$TARGET-`date +%Y%m%d%H%M`.txt 2>&1
@@ -388,21 +392,28 @@ if [ "$MODE" = "discover" ]; then
 	echo -e "$OKRED                                                              ____ / /"
 	echo -e "$OKRED                                                                   \/$RESET"
 	echo ""
-	echo -e "$OKGREEN + -- ----------------------------=[Running Ping Discovery Scan]=------------- -- +$RESET"
+	echo -e "$OKGREEN + -- ----------------------------=[Running MASSCAN]=--------- -- +$RESET"
+	rm -f $LOOT_DIR/notes/masscanResults.txt
+	rm -f $LOOT_DIR/notes/masscanSorted.txt
+	masscan -p$DEFAULT_TCP_PORTS $TARGET --rate 2000 | tee -a $LOOT_DIR/notes/masscanResults.txt
+	sort -u $LOOT_DIR/notes/masscanResults.txt -o $LOOT_DIR/notes/masscanSorted.txt
+	#echo "SORTED PORTS AND IP ADDRESS RESULTS"
+	#cat $LOOT_DIR/notes/masscanSorted.txt
+	echo "FOUND IP ADDRESSES"
+	cat $LOOT_DIR/notes/masscanSorted.txt | cut -f6 -d ' ' | sort -u | tee -a $LOOT_DIR/domains/masscan_IP_Results.txt
+	echo -e "$OKGREEN + -- ----------------------------=[Running NMAP Ping Discovery Scan]=------------- -- +$RESET"
 	nmap -sn $TARGET | grep ' for ' | awk '{print $5}' | tee $LOOT_DIR/domains/sniper-ping-ips.txt
-	#echo -e "$OKGREEN + -- ----------------------------=[Running MASSCAN]=--------- -- +$RESET"
-	#masscan -p$DEFAULT_TCP_PORTS --source-ip 127.0.0.1 $TARGET
 	echo -e "$OKGREEN + -- ----------------------------=[Checking ARP Cache]=---------------------- -- +$RESET"
 	arp -a -n | tee $LOOT_DIR/domains/sniper-arp-ips.txt
-	echo -e "$OKGREEN + -- ----------------------------=[Running TCP Port Discovery Scan]=--------- -- +$RESET"
-	unicornscan -p $DEFAULT_TCP_PORTS $TARGET 2>/dev/null | tee $LOOT_DIR/domains/sniper-tcp-ports.txt
-	cat $LOOT_DIR/domains/sniper-tcp-ports.txt | awk '{print $6}' | sort -u | tee $LOOT_DIR/domains/sniper-tcp-ips.txt
-	echo -e "$OKGREEN + -- ----------------------------=[Running UDP Port Discovery Scan]=--------- -- +$RESET"
-	unicornscan -m U -p $DEFAULT_UDP_PORTS $TARGET 2>/dev/null | tee $LOOT_DIR/domains/sniper-udp-ports.txt
-	cat $LOOT_DIR/domains/sniper-udp-ports.txt | awk '{print $6}' | sort -u > $LOOT_DIR/domains/sniper-udp-ips.txt
+	#echo -e "$OKGREEN + -- ----------------------------=[Running Unicornscan TCP Port Discovery Scan]=--------- -- +$RESET"
+	#unicornscan -p $DEFAULT_TCP_PORTS $TARGET 2>/dev/null | tee $LOOT_DIR/domains/sniper-tcp-ports.txt
+	#cat $LOOT_DIR/domains/sniper-tcp-ports.txt | awk '{print $6}' | sort -u | tee $LOOT_DIR/domains/sniper-tcp-ips.txt
+	#echo -e "$OKGREEN + -- ----------------------------=[Running Unicornscan UDP Port Discovery Scan]=--------- -- +$RESET"
+	#unicornscan -m U -p $DEFAULT_UDP_PORTS $TARGET 2>/dev/null | tee $LOOT_DIR/domains/sniper-udp-ports.txt
+	#cat $LOOT_DIR/domains/sniper-udp-ports.txt | awk '{print $6}' | sort -u > $LOOT_DIR/domains/sniper-udp-ips.txt
 
 	echo -e "$OKGREEN + -- ----------------------------=[Current Targets]=------------------------- -- +$RESET"
-	cat $LOOT_DIR/domains/sniper-ping-ips.txt $LOOT_DIR/domains/sniper-tcp-ips.txt $LOOT_DIR/domains/sniper-udp-ips.txt > $LOOT_DIR/domains/sniper-ips-unsorted.txt
+	cat $LOOT_DIR/domains/sniper-ping-ips.txt $LOOT_DIR/domains/sniper-tcp-ips.txt $LOOT_DIR/domains/sniper-udp-ips.txt $LOOT_DIR/domains/masscan_IP_Results.txt > $LOOT_DIR/domains/sniper-ips-unsorted.txt
 	sort -u $LOOT_DIR/domains/sniper-ips-unsorted.txt > $LOOT_DIR/domains/sniper-ips.txt
 	cat $LOOT_DIR/domains/sniper-ips.txt
 	#echo -e "$OKGREEN + -- ----------------------------=[Launching Sn1per Scans]=------------------ -- +$RESET"
