@@ -14,9 +14,6 @@
 
 #apt-get update && upgrade -y
 
-#for smb-psexec NSE script (will cause antivirus false positive)
-#cp ./nmap_service.exe /usr/share/nmap/nselib/data/psexec/
-
 #make sure sniper is installed first or this won't work
 echo "replacing sniper"
 mv /usr/share/sniper/sniper /usr/share/sniper/sniper_$(date +'%FT%H%M%S%3N')
@@ -36,6 +33,12 @@ cp -r ./scripts /usr/share/sparta/
 echo "replacing ansi.cson"
 mv /root/.atom/packages/language-ansi/grammars/ansi.cson /root/.atom/packages/language-ansi/grammars/ansi.cson_$(date +'%FT%H%M%S%3N')
 cp ./ansi.cson /root/.atom/packages/language-ansi/grammars/ansi.cson
+
+#for smb-psexec NSE script (will cause antivirus false positive)
+echo "adding nmap_service.exe"
+cp ./nmap_service.exe /usr/share/nmap/nselib/data/psexec/
+cd /usr/share/nmap/nselib/data/psexec/
+chmod +x nmap_service.exe
 
 echo "done"
 echo "open sparta and enter an IP to scan..."

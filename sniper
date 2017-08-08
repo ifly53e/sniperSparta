@@ -181,13 +181,35 @@ function loot {
 	echo -e "$OKRED /____/_/ /_/___/ .___/\___/_/     $RESET"
 	echo -e "$OKRED               /_/                 $RESET"
 	echo ""
+	echo -e "$OKORANGE + -- --=[Enter the full path of the SPARTA tool-output folder:$RESET"
+	echo -e "$OKORANGE + -- --=[i.e. (need slash here -->) /root/Documents/timWasHere-tool-ouput (<-- no slash at end)]=-- --$RESET"
+	read SPARTAFOLDER
+	rm /tmp/spartafolder.txt
+	ls $SPARTAFOLDER/nmap | grep "xml" > /tmp/spartafolder.txt
+	if [ ! -s /tmp/spartafolder.txt ]; then
+	  echo "contents of entered folder"
+	  ls $SPARTAFOLDER/nmap
+	  echo "nmap folder is either empty or has no nmap xml files...Remember to use a leading '/' in the beginning of the path. Also, did you remember to save the SPARTA project?"
+	  exit
+	fi
+	echo "found the folder"
+	FOUNDXML="$(cat /tmp/spartafolder.txt)"
+	echo $FOUNDXML
+	if [ -z "$FOUNDXML" ]; then
+	  echo "no nmap xml files to copy over to sniper/loot/nmap"
+	else
+	  for found in $FOUNDXML; do
+	    echo ""copying ""$SPARTAFOLDER"/nmap/$found " to "/usr/share/sniper/loot/nmap/"nmap"$found"
+	    cp "$SPARTAFOLDER"/nmap/$found /usr/share/sniper/loot/nmap/"nmap"$found
+	  done
+	fi
 	echo -e "$OKORANGE + -- --=[Current workspaces...$RESET"
 	cd $LOOT_DIR
 	ls -lh $LOOT_DIR/workspace/
 	echo -e "$OKORANGE + -- --=[Enter a name for the workspace:$RESET"
 	read WORKSPACE
 	if [ -z $WORKSPACE ]; then
-		WORKSPACE="default"
+		WORKSPACE="default_$(date +'%FT%H%M%S%3N')"
 	fi
 	mkdir -p $LOOT_DIR/workspace/$WORKSPACE 2> /dev/null
 	echo -e "$OKORANGE + -- --=[Generating reports...$RESET"
@@ -206,14 +228,15 @@ function loot {
 	find /usr/share/sniper/loot/screenshots/ -size -10k -exec rm -f {} \; 2> /dev/null
 	rm -f $LOOT_DIR/.fuse_* 2> /dev/null
 	echo -e "$OKORANGE + -- --=[Starting Metasploit Pro service...$RESET"
-	/etc/init.d/metasploit start 2> /dev/null
-	if [ -z $DISABLE_POSTGRESQL ]; then /etc/init.d/postgresql start 2> /dev/null; fi
+	service metasploit start 2>/dev/null
+	if [ -z $DISABLE_POSTGRESQL ]; then service postgresql start 2>/dev/null; fi
 	echo -e "$OKORANGE + -- --=[Importing NMap XML files into Metasploit...$RESET"
 
 	#if run with loot as target then you have to replace target with an ip or the import wont work...how about 85.85.85.85
   if [[ $TARGET = "loot" ]]; then
 		TARGET="85.85.85.85"
 	fi
+
 
 	# I don't like how this looks or runs...
 	#get list of xml files in the nmap folder
@@ -230,9 +253,11 @@ function loot {
 	IS_SP_EMPTY="$(cat $LOOT_DIR/notes/nmap*.txt)"
 	if [ "$IS_SP_EMPTY" != "" ]; then
 		echo "found nmap text files for searchsploit to use in $LOOT_DIR/notes/"
+		echo "importing all xml into metasploit database"
 		msfconsole -x "workspace -a $WORKSPACE; workspace $WORKSPACE; db_import $LOOT_DIR/nmap/nmap*.xml; notes --add -t searchsploit -n '$hello' $TARGET ; hosts; services; notes; exit;"
 	else
 		echo "did not find any nmap text files for searchsploit to use in $LOOT_DIR/notes/"
+		echo "importing all xml into metasploit database"
 		msfconsole -x "workspace -a $WORKSPACE; workspace $WORKSPACE; db_import $LOOT_DIR/nmap/nmap*.xml; hosts; services; notes; exit;"
 	fi
 
