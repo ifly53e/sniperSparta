@@ -182,7 +182,7 @@ function loot {
 	echo -e "$OKRED               /_/                 $RESET"
 	echo ""
 	echo -e "$OKORANGE + -- --=[Enter the full path of the SPARTA tool-output folder:$RESET"
-	echo -e "$OKORANGE + -- --=[i.e. (need slash here -->) /root/Documents/timWasHere-tool-ouput (<-- no slash at end)]=-- --$RESET"
+	echo -e "$OKORANGE + -- --=[i.e. (need slash here -->) /path/to/timSniperSpartaSave-tool-output (<-- no slash at end)]=-- --$RESET"
 	read SPARTAFOLDER
 	rm /tmp/spartafolder.txt
 	ls $SPARTAFOLDER/nmap | grep "xml" > /tmp/spartafolder.txt

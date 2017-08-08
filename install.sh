@@ -25,7 +25,7 @@ mv /usr/share/sparta/sparta.conf /usr/share/sparta/sparta.conf_$(date +'%FT%H%M%
 cp ./sparta.conf /usr/share/sparta/
 
 #make sure sparta is installed first or this won't work
-echo "coping sparta scripts folder"
+echo "copying sparta scripts folder"
 mv /usr/share/sparta/scripts/ /usr/share/sparta/scripts_$(date +'%FT%H%M%S%3N')/
 cp -r ./scripts /usr/share/sparta/
 
