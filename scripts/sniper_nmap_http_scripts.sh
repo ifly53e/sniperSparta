@@ -56,6 +56,6 @@ fi
 		#nmap -A -sV -T4 -Pn -p "$MODE" --script=/usr/share/nmap/scripts/http-vuln-cve2017-5638.nse --script=/usr/share/nmap/scripts/iis-buffer-overflow.nse --script=http-enum,http-headers,http-server-header,http-php-version,http-iis-webdav-vuln,http-vuln-*,http-phpmyadmin-dir-traversal $TARGET -oX $LOOT_DIR/nmap/nmap"$MODE"-$TARGET.xml
 		#took out 5638 due to duplicate error
 		#/usr/bin/../share/nmap/nse_main.lua:845: duplicate script ID: 'http-vuln-cve2017-5638'
-		nmap -A -sV -T4 -Pn -p "$MODE"  --script=/usr/share/nmap/scripts/iis-buffer-overflow.nse --script=http-enum,http-headers,http-server-header,http-php-version,http-iis-webdav-vuln,http-vuln-*,http-phpmyadmin-dir-traversal $TARGET -oX $LOOT_DIR/nmap/nmap"$MODE"-$TARGET.xml
+		nmap -A -sV -T4 -Pn -p "$MODE"  --script=/usr/share/sniper/bin/iis-buffer-overflow.nse --script=http-enum,http-headers,http-server-header,http-php-version,http-iis-webdav-vuln,http-vuln-*,http-phpmyadmin-dir-traversal $TARGET -oX $LOOT_DIR/nmap/nmap"$MODE"-$TARGET.xml
 		echo -e "$OKGREEN + -- ----------------------------=[Exiting Sniper sh script]=---- -- +$RESET"
 		exit

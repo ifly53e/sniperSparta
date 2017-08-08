@@ -57,6 +57,6 @@ cd $PLUGINS_DIR/ssh-audit
 python ssh-audit.py $TARGET:$MODE
 cd $INSTALL_DIR
 nmap -A -sV -Pn -sC -T4 -p $MODE --script=ssh-* $TARGET -oX $LOOT_DIR/nmap/nmap"$MODE"_"$TARGET"_"$(date +'%FT%H%M%S')"_.xml
-msfconsole -x "use scanner/ssh/ssh_enumusers; setg USER_FILE "$USER_FILE"; setg RHOSTS "$TARGET"; setg RHOST "$TARGET"; run; use scanner/ssh/ssh_identify_pubkeys; run; use scanner/ssh/ssh_version; run; exit;"
+msfconsole -x "use scanner/ssh/ssh_enumusers; setg USER_FILE "$USER_FILE"; setg RHOSTS "$TARGET"; setg RHOST "$TARGET"; setg RPORT "$MODE";  run; use scanner/ssh/ssh_identify_pubkeys; run; use scanner/ssh/ssh_version; run; exit;"
 echo -e "$OKGREEN + -- ----------------------------=[Exiting Sniper sh script]=---- -- +$RESET"
 exit

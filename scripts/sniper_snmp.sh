@@ -53,7 +53,7 @@ else
 fi
 
 echo -e "$OKORANGE + -- --=[Port snmp opened... running tests...$RESET"
-for a in `cat /usr/share/brutex/wordlists/snmp-strings.txt`; do snmpwalk $TARGET -c $a
+for a in `cat /usr/share/brutex/wordlists/snmp-strings.txt`; do snmpwalk $TARGET -c $a; done;
 nmap -sU -p 161 --script=snmp* $TARGET -oX "$LOOT_DIR"/nmap/nmap"$MODE"_"$TARGET"_"$(date +'%FT%H%M%S')"_.xml
 onesixtyone $TARGET public
 snmpwalk $TARGET -c public -v 2c

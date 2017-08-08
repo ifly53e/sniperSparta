@@ -54,7 +54,7 @@ fi
 
 amap $TARGET $MODE -A
 nmap -A -sV -Pn -T4 -p $MODE --script=rmi-* $TARGET -oX "$LOOT_DIR"/nmap/nmap"$MODE"_"$TARGET"_"$(date +'%FT%H%M%S')"_.xml
-msfconsole -x "use gather/java_rmi_registry; set RHOST "$TARGET"; run;"
-msfconsole -x "use scanner/misc/java_rmi_server; set RHOST "$TARGET"; run;"
+msfconsole -x "use gather/java_rmi_registry; set RHOST "$TARGET"; setg RPORT "$MODE"; run;"
+msfconsole -x "use scanner/misc/java_rmi_server; set RHOST "$TARGET"; setg RPORT "$MODE"; run;"
 echo -e "$OKGREEN + -- ----------------------------=[Exiting Sniper sh script]=---- -- +$RESET"
 exit

