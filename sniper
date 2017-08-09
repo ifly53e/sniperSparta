@@ -184,24 +184,26 @@ function loot {
 	echo -e "$OKORANGE + -- --=[Enter the full path of the SPARTA tool-output folder:$RESET"
 	echo -e "$OKORANGE + -- --=[i.e. (need slash here -->) /path/to/timSniperSpartaSave-tool-output (<-- no slash at end)]=-- --$RESET"
 	read SPARTAFOLDER
-	rm /tmp/spartafolder.txt
-	ls $SPARTAFOLDER/nmap | grep "xml" > /tmp/spartafolder.txt
-	if [ ! -s /tmp/spartafolder.txt ]; then
-	  echo "contents of entered folder"
-	  ls $SPARTAFOLDER/nmap
-	  echo "nmap folder is either empty or has no nmap xml files...Remember to use a leading '/' in the beginning of the path. Also, did you remember to save the SPARTA project?"
-	  exit
-	fi
-	echo "found the folder"
-	FOUNDXML="$(cat /tmp/spartafolder.txt)"
-	echo $FOUNDXML
-	if [ -z "$FOUNDXML" ]; then
-	  echo "no nmap xml files to copy over to sniper/loot/nmap"
-	else
-	  for found in $FOUNDXML; do
-	    echo ""copying ""$SPARTAFOLDER"/nmap/$found " to "/usr/share/sniper/loot/nmap/"nmap"$found"
-	    cp "$SPARTAFOLDER"/nmap/$found /usr/share/sniper/loot/nmap/"nmap"$found
-	  done
+	rm -f /tmp/spartafolder.txt
+	if [$SPARTAFOLDER != "timIsCool"]; then
+			ls $SPARTAFOLDER/nmap | grep "xml" > /tmp/spartafolder.txt
+			if [ ! -s /tmp/spartafolder.txt ]; then
+			  echo "contents of entered folder"
+			  ls $SPARTAFOLDER/nmap
+			  echo "nmap folder is either empty or has no nmap xml files...Remember to use a leading '/' in the beginning of the path. Also, did you remember to save the SPARTA project?"
+			  exit
+			fi
+			echo "found the folder"
+			FOUNDXML="$(cat /tmp/spartafolder.txt)"
+			echo $FOUNDXML
+			if [ -z "$FOUNDXML" ]; then
+			  echo "no nmap xml files to copy over to sniper/loot/nmap"
+			else
+			  for found in $FOUNDXML; do
+			    echo ""copying ""$SPARTAFOLDER"/nmap/$found " to "/usr/share/sniper/loot/nmap/"nmap"$found"
+			    cp "$SPARTAFOLDER"/nmap/$found /usr/share/sniper/loot/nmap/"nmap"$found
+			  done
+			fi
 	fi
 	echo -e "$OKORANGE + -- --=[Current workspaces...$RESET"
 	cd $LOOT_DIR
@@ -395,12 +397,12 @@ if [ "$MODE" = "discover" ]; then
 	echo -e "$OKGREEN + -- ----------------------------=[Running MASSCAN]=--------- -- +$RESET"
 	rm -f $LOOT_DIR/notes/masscanResults.txt
 	rm -f $LOOT_DIR/notes/masscanSorted.txt
-	masscan -p$DEFAULT_TCP_PORTS $TARGET --rate 2000 | tee -a $LOOT_DIR/notes/masscanResults.txt
+	masscan -p$DEFAULT_TCP_PORTS $TARGET --rate 2000 | tee $LOOT_DIR/notes/masscanResults.txt
 	sort -u $LOOT_DIR/notes/masscanResults.txt -o $LOOT_DIR/notes/masscanSorted.txt
 	#echo "SORTED PORTS AND IP ADDRESS RESULTS"
 	#cat $LOOT_DIR/notes/masscanSorted.txt
 	echo "FOUND IP ADDRESSES"
-	cat $LOOT_DIR/notes/masscanSorted.txt | cut -f6 -d ' ' | sort -u | tee -a $LOOT_DIR/domains/masscan_IP_Results.txt
+	cat $LOOT_DIR/notes/masscanSorted.txt | cut -f6 -d ' ' | sort -u | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tee $LOOT_DIR/domains/masscan_IP_Results.txt
 	echo -e "$OKGREEN + -- ----------------------------=[Running NMAP Ping Discovery Scan]=------------- -- +$RESET"
 	nmap -sn $TARGET | grep ' for ' | awk '{print $5}' | tee $LOOT_DIR/domains/sniper-ping-ips.txt
 	echo -e "$OKGREEN + -- ----------------------------=[Checking ARP Cache]=---------------------- -- +$RESET"
@@ -413,8 +415,9 @@ if [ "$MODE" = "discover" ]; then
 	#cat $LOOT_DIR/domains/sniper-udp-ports.txt | awk '{print $6}' | sort -u > $LOOT_DIR/domains/sniper-udp-ips.txt
 
 	echo -e "$OKGREEN + -- ----------------------------=[Current Targets]=------------------------- -- +$RESET"
-	cat $LOOT_DIR/domains/sniper-ping-ips.txt $LOOT_DIR/domains/sniper-tcp-ips.txt $LOOT_DIR/domains/sniper-udp-ips.txt $LOOT_DIR/domains/masscan_IP_Results.txt > $LOOT_DIR/domains/sniper-ips-unsorted.txt
-	sort -u $LOOT_DIR/domains/sniper-ips-unsorted.txt > $LOOT_DIR/domains/sniper-ips.txt
+	#cat $LOOT_DIR/domains/sniper-ping-ips.txt $LOOT_DIR/domains/sniper-tcp-ips.txt $LOOT_DIR/domains/sniper-udp-ips.txt $LOOT_DIR/domains/masscan_IP_Results.txt > $LOOT_DIR/domains/sniper-ips-unsorted.txt
+	cat $LOOT_DIR/domains/sniper-ping-ips.txt $LOOT_DIR/domains/masscan_IP_Results.txt > $LOOT_DIR/domains/sniper-ips-unsorted.txt
+	sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n -u $LOOT_DIR/domains/sniper-ips-unsorted.txt > $LOOT_DIR/domains/sniper-ips.txt
 	cat $LOOT_DIR/domains/sniper-ips.txt
 	#echo -e "$OKGREEN + -- ----------------------------=[Launching Sn1per Scans]=------------------ -- +$RESET"
 	#echo ""
